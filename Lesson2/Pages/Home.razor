@@ -1,57 +1,318 @@
 ﻿@page "/"
 
-<div class="accordion accordion-flush" id="accordionFlushExample">
-    @foreach (var personel in personelList)
-    {
-        <div class="accordion-item">
-            <h2 class="accordion-header">
-                <button class="accordion-button collapsed" type="button" @onclick="()=>IsOpen(personel.Id)" is data-bs-toggle="collapse" data-bs-target="#flush-collapseOne-@personel.Id" aria-expanded="false" aria-controls="flush-collapseOne">
-                    @personel.Ad @personel.Soyad
-                </button>
-            </h2>
-            <div id="flush-collapseOne-@personel.Id" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-                @if (GetId == personel.Id)
-                {
-                    <PersonelDetail Id="personel.Id" />
-                }
+@if (personelList == null)
+{
+    <h1>Liste yükleniyor...</h1>
+}
+else
+{
+    <button type="button" class="btn btn-primary" @onclick="()=>Add()">+</button>
 
-            </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Adı</th>
+                <th scope="col">Soyadı</th>
+                <th scope="col">DogumTarihi</th>
+                <th scope="col">Mesleği</th>
+                <th scope="col">Yaşı</th>
+                <th scope="col">İşlemler</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var personel in personelList)
+            {
+                <tr>
+                    <th scope="row">@personel.Id</th>
+                    <td>@personel.Ad</td>
+                    <td>@personel.Soyad</td>
+                    <td>@personel.DogumTarihi</td>
+                    <td>@personel.Meslegi</td>
+                    <td>@personel.Yasi</td>
+                    <td>
+                        <button type="button" class="btn btn-danger" @onclick="() => Delete(personel.Id)">X</button>
+                    </td>
+                </tr>
+
+            }
+        </tbody>
+    </table>
+
+    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+        <div class="btn-group me-2" role="group" aria-label="First group">
+            @{
+                int bolum = Count / 10;
+            }
+            <button type="button" class="btn btn-info" @onclick="()=>Paging(0, PageSize)">Başlangıç</button>
+            <button type="button" class="btn btn-primary" @onclick="()=>Paging(0, PageSize)">1</button>
+            @for (int i = 1; i < bolum; i++)
+            {
+                int skip = i * PageSize;
+
+                if (i == 1)
+                {
+                    i++;
+                }
+                <button type="button" class="btn btn-primary" @onclick="()=>Paging(skip, PageSize)">@i</button>
+            }
+            @{
+                int sonuncuDeger = bolum * PageSize;
+            }
+            <button type="button" class="btn btn-info" @onclick="()=>Paging(sonuncuDeger, PageSize)">Bitiş</button>
         </div>
-    }
-</div>
+    </div>
+
+}
+
+
 
 @code {
     List<Personel> personelList;
 
     private int GetId { get; set; }
+    public int PageSize { get; set; } = 10;
+    public int Count { get; set; }
 
     protected override void OnInitialized()
     {
-        personelList = new List<Personel>
+        personelList = FirstPage();
+        Count = Personeller().Count();
+    }
+
+    List<Personel> FirstPage()
+    {
+        return Personeller().Skip(0).Take(PageSize).ToList();
+    }
+
+    void Paging(int skip, int take)
+    {
+        personelList = Personeller().Skip(skip).Take(take).ToList();
+        StateHasChanged();
+    }
+
+    private List<Personel> Personeller()
+    {
+        return new List<Personel>
         {
             new Personel
-            {
-                Id = 1,
-                Ad = "Huseyin",
-                Soyad="Kazan"
-            },
+                {
+                    Id = 1,
+                    Ad = "Huseyin",
+                    Soyad = "Kazan",
+                    DogumTarihi = "06.08.1987",
+                    Meslegi = "Yazılım Geliştirici",
+                    Yasi = 37
+                },
+         new Personel
+             {
+                 Id = 2,
+                 Ad = "Hasan",
+                 Soyad = "Kazan",
+                 DogumTarihi = "30.01.2024",
+                 Meslegi = "Bebek",
+                 Yasi = 3
+             },
+         new Personel
+             {
+                 Id = 3,
+                 Ad = "Zeynel Abidin",
+                 Soyad = "Kazan",
+                 DogumTarihi = "30.01.2024",
+                 Meslegi = "Bebek",
+                 Yasi = 3
+             },
              new Personel
-            {
-                Id = 2,
-                Ad = "Hasan",
-                Soyad="Kazan"
-            },
-             new Personel
-            {
-                Id = 3,
-                Ad = "Zeynel Abidin",
-                Soyad="Kazan"
-            }
+                {
+                    Id = 4,
+                    Ad = "Huseyin",
+                    Soyad = "Kazan",
+                    DogumTarihi = "06.08.1987",
+                    Meslegi = "Yazılım Geliştirici",
+                    Yasi = 37
+                },
+                new Personel
+                {
+                    Id = 5,
+                    Ad = "Huseyin",
+                    Soyad = "Kazan",
+                    DogumTarihi = "06.08.1987",
+                    Meslegi = "Yazılım Geliştirici",
+                    Yasi = 37
+                },
+                new Personel
+                {
+                    Id = 6,
+                    Ad = "Huseyin",
+                    Soyad = "Kazan",
+                    DogumTarihi = "06.08.1987",
+                    Meslegi = "Yazılım Geliştirici",
+                    Yasi = 37
+                },
+                new Personel
+                {
+                    Id = 7,
+                    Ad = "Huseyin",
+                    Soyad = "Kazan",
+                    DogumTarihi = "06.08.1987",
+                    Meslegi = "Yazılım Geliştirici",
+                    Yasi = 37
+                },
+                new Personel
+                {
+                    Id = 8,
+                    Ad = "Huseyin",
+                    Soyad = "Kazan",
+                    DogumTarihi = "06.08.1987",
+                    Meslegi = "Yazılım Geliştirici",
+                    Yasi = 37
+                },
+                new Personel
+                {
+                    Id = 9,
+                    Ad = "Huseyin",
+                    Soyad = "Kazan",
+                    DogumTarihi = "06.08.1987",
+                    Meslegi = "Yazılım Geliştirici",
+                    Yasi = 37
+                },
+                new Personel
+                {
+                    Id = 10,
+                    Ad = "Huseyin",
+                    Soyad = "Kazan",
+                    DogumTarihi = "06.08.1987",
+                    Meslegi = "Yazılım Geliştirici",
+                    Yasi = 37
+                },
+                new Personel
+                {
+                    Id = 11,
+                    Ad = "Huseyin",
+                    Soyad = "Kazan",
+                    DogumTarihi = "06.08.1987",
+                    Meslegi = "Yazılım Geliştirici",
+                    Yasi = 37
+                },
+                new Personel
+                {
+                    Id = 12,
+                    Ad = "Huseyin",
+                    Soyad = "Kazan",
+                    DogumTarihi = "06.08.1987",
+                    Meslegi = "Yazılım Geliştirici",
+                    Yasi = 37
+                },
+                new Personel
+                {
+                    Id = 13,
+                    Ad = "Huseyin",
+                    Soyad = "Kazan",
+                    DogumTarihi = "06.08.1987",
+                    Meslegi = "Yazılım Geliştirici",
+                    Yasi = 37
+                },
+                new Personel
+                {
+                    Id = 14,
+                    Ad = "Huseyin",
+                    Soyad = "Kazan",
+                    DogumTarihi = "06.08.1987",
+                    Meslegi = "Yazılım Geliştirici",
+                    Yasi = 37
+                },
+                new Personel
+                {
+                    Id = 15,
+                    Ad = "Huseyin",
+                    Soyad = "Kazan",
+                    DogumTarihi = "06.08.1987",
+                    Meslegi = "Yazılım Geliştirici",
+                    Yasi = 37
+                },
+                new Personel
+                {
+                    Id = 16,
+                    Ad = "Huseyin",
+                    Soyad = "Kazan",
+                    DogumTarihi = "06.08.1987",
+                    Meslegi = "Yazılım Geliştirici",
+                    Yasi = 37
+                },
+                new Personel
+                {
+                    Id = 17,
+                    Ad = "Huseyin",
+                    Soyad = "Kazan",
+                    DogumTarihi = "06.08.1987",
+                    Meslegi = "Yazılım Geliştirici",
+                    Yasi = 37
+                },
+                new Personel
+                {
+                    Id = 18,
+                    Ad = "Huseyin",
+                    Soyad = "Kazan",
+                    DogumTarihi = "06.08.1987",
+                    Meslegi = "Yazılım Geliştirici",
+                    Yasi = 37
+                },
+                 new Personel
+                {
+                    Id = 19,
+                    Ad = "Huseyin",
+                    Soyad = "Kazan",
+                    DogumTarihi = "06.08.1987",
+                    Meslegi = "Yazılım Geliştirici",
+                    Yasi = 37
+                },
+                 new Personel
+                {
+                    Id = 20,
+                    Ad = "Huseyin",
+                    Soyad = "Kazan",
+                    DogumTarihi = "06.08.1987",
+                    Meslegi = "Yazılım Geliştirici",
+                    Yasi = 37
+                },
+                 new Personel
+                {
+                    Id = 21,
+                    Ad = "Huseyin",
+                    Soyad = "Kazan",
+                    DogumTarihi = "06.08.1987",
+                    Meslegi = "Yazılım Geliştirici",
+                    Yasi = 37
+                }
         };
     }
 
     void IsOpen(int id)
     {
         GetId = id;
+    }
+
+    void Delete(int id)
+    {
+        var listtenGelen = personelList.Where(personelList => personelList.Id == id).FirstOrDefault();
+        personelList.Remove(listtenGelen);
+        StateHasChanged();
+    }
+
+    void Add()
+    {
+        int gelenPersonelId = personelList.OrderByDescending(personelList => personelList.Id).FirstOrDefault().Id;
+
+        gelenPersonelId++;
+        personelList.Add(new Personel
+            {
+                Id = gelenPersonelId,
+                Ad = "Mustafa",
+                Soyad = "Demir",
+                DogumTarihi = "6.4.1996",
+                Meslegi = "Araştırmacı",
+                Yasi = 28
+            });
+        StateHasChanged();
     }
 }
