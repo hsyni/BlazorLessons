@@ -1,0 +1,57 @@
+﻿@page "/"
+
+<div class="accordion accordion-flush" id="accordionFlushExample">
+    @foreach (var personel in personelList)
+    {
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" @onclick="()=>IsOpen(personel.Id)" is data-bs-toggle="collapse" data-bs-target="#flush-collapseOne-@personel.Id" aria-expanded="false" aria-controls="flush-collapseOne">
+                    @personel.Ad @personel.Soyad
+                </button>
+            </h2>
+            <div id="flush-collapseOne-@personel.Id" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                @if (GetId == personel.Id)
+                {
+                    <PersonelDetail Id="personel.Id" />
+                }
+
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    List<Personel> personelList;
+
+    private int GetId { get; set; }
+
+    protected override void OnInitialized()
+    {
+        personelList = new List<Personel>
+        {
+            new Personel
+            {
+                Id = 1,
+                Ad = "Huseyin",
+                Soyad="Kazan"
+            },
+             new Personel
+            {
+                Id = 2,
+                Ad = "Hasan",
+                Soyad="Kazan"
+            },
+             new Personel
+            {
+                Id = 3,
+                Ad = "Zeynel Abidin",
+                Soyad="Kazan"
+            }
+        };
+    }
+
+    void IsOpen(int id)
+    {
+        GetId = id;
+    }
+}

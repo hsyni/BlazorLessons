@@ -1,0 +1,77 @@
+﻿@if (personel == null)
+{
+    <h5>İlgili veriler yükleniyor...</h5>
+}
+else
+{
+
+
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Adı</th>
+                <th scope="col">Soyadı</th>
+                <th scope="col">DogumTarihi</th>
+                <th scope="col">Mesleği</th>
+                <th scope="col">Yaşı</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">@personel.Id</th>
+                <td>@personel.Ad</td>
+                <td>@personel.Soyad</td>
+                <td>@personel.DogumTarihi</td>
+                <td>@personel.Meslegi</td>
+                <td>@personel.Yasi</td>
+            </tr>
+        </tbody>
+    </table>
+}
+@code {
+    [Parameter]
+    public int Id { get; set; }
+    Personel personel;
+    List<Personel> personels;
+
+    protected override void OnInitialized()
+    {
+        personel = Personeller().Where(personel => personel.Id == Id).FirstOrDefault();
+    }
+
+    private List<Personel> Personeller()
+    {
+        return personels = new List<Personel> {
+
+         new Personel
+                {
+                    Id = 1,
+                    Ad = "Huseyin",
+                    Soyad = "Kazan",
+                    DogumTarihi = "06.08.1987",
+                    Meslegi = "Yazılım Geliştirici",
+                    Yasi = 37
+                },
+         new Personel
+             {
+                 Id = 2,
+                 Ad = "Hasan",
+                 Soyad = "Kazan",
+                 DogumTarihi = "30.01.2024",
+                 Meslegi = "Bebek",
+                 Yasi = 3
+             },
+         new Personel
+             {
+                 Id = 3,
+                 Ad = "Zeynel Abidin",
+                 Soyad = "Kazan",
+                 DogumTarihi = "30.01.2024",
+                 Meslegi = "Bebek",
+                 Yasi = 3
+             }
+       };
+    }
+}
