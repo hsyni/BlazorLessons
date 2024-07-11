@@ -12,9 +12,18 @@ else
         <thead>
             <tr>
                 <th scope="col">#</th>
-                <th scope="col">Adı</th>
-                <th scope="col">Soyadı</th>
-                <th scope="col">DogumTarihi</th>
+                <th scope="col">
+                    Adı
+                    <input type="text" class="form-control" @oninput="(args)=> AdaGore(args.Value.ToString())" />
+                </th>
+                <th scope="col">
+                    Soyadı
+                    <input type="text" class="form-control" @oninput="(args)=> SoyadaGore(args.Value.ToString())" />
+                </th>
+                <th scope="col">
+                    DogumTarihi
+                    <input type="date" class="form-control" @oninput="(args)=> TariheGore(Convert.ToDateTime(args.Value))" />
+                </th>
                 <th scope="col">Mesleği</th>
                 <th scope="col">Yaşı</th>
                 <th scope="col">İşlemler</th>
@@ -60,6 +69,7 @@ else
                 int sonuncuDeger = bolum * PageSize;
             }
             <button type="button" class="btn btn-info" @onclick="()=>Paging(sonuncuDeger, PageSize)">Bitiş</button>
+            <div>@Count</div>
         </div>
     </div>
 
@@ -69,13 +79,20 @@ else
 
 @code {
     List<Personel> personelList;
+    List<Personel> adaGoreList;
+    List<Personel> soyadaGoreList;
+    List<Personel> tariheGoreList;
+
 
     private int GetId { get; set; }
     public int PageSize { get; set; } = 10;
     public int Count { get; set; }
 
+    public int FilterType { get; set; }
+
     protected override void OnInitialized()
     {
+        FilterType = 0;
         personelList = FirstPage();
         Count = Personeller().Count();
     }
@@ -87,8 +104,26 @@ else
 
     void Paging(int skip, int take)
     {
-        personelList = Personeller().Skip(skip).Take(take).ToList();
-        StateHasChanged();
+        if (FilterType == 0)
+        {
+            personelList = Personeller().Skip(skip).Take(take).ToList();
+            StateHasChanged();
+        }
+        else if (FilterType == 1)
+        {
+            personelList = adaGoreList.Skip(skip).Take(take).ToList();
+            StateHasChanged();
+        }
+        else if (FilterType == 2)
+        {
+            personelList = soyadaGoreList.Skip(skip).Take(take).ToList();
+            StateHasChanged();
+        }
+        else if (FilterType == 3)
+        {
+            personelList = tariheGoreList.Skip(skip).Take(take).ToList();
+            StateHasChanged();
+        }
     }
 
     private List<Personel> Personeller()
@@ -100,25 +135,25 @@ else
                     Id = 1,
                     Ad = "Huseyin",
                     Soyad = "Kazan",
-                    DogumTarihi = "06.08.1987",
+                    DogumTarihi =Convert.ToDateTime((new DateTime(1987,8,6).ToString("dd/MM/yyyy"))),
                     Meslegi = "Yazılım Geliştirici",
                     Yasi = 37
                 },
-         new Personel
+            new Personel
              {
                  Id = 2,
                  Ad = "Hasan",
                  Soyad = "Kazan",
-                 DogumTarihi = "30.01.2024",
+                 DogumTarihi = Convert.ToDateTime((new DateTime(2024,1,30).ToString("dd/MM/yyyy"))),
                  Meslegi = "Bebek",
                  Yasi = 3
              },
-         new Personel
+            new Personel
              {
                  Id = 3,
                  Ad = "Zeynel Abidin",
                  Soyad = "Kazan",
-                 DogumTarihi = "30.01.2024",
+                 DogumTarihi = Convert.ToDateTime((new DateTime(2024,1,30).ToString("dd/MM/yyyy"))),
                  Meslegi = "Bebek",
                  Yasi = 3
              },
@@ -127,7 +162,7 @@ else
                     Id = 4,
                     Ad = "Huseyin",
                     Soyad = "Kazan",
-                    DogumTarihi = "06.08.1987",
+                    DogumTarihi = Convert.ToDateTime((new DateTime(1987,8,6).ToString("dd/MM/yyyy"))),
                     Meslegi = "Yazılım Geliştirici",
                     Yasi = 37
                 },
@@ -136,7 +171,7 @@ else
                     Id = 5,
                     Ad = "Huseyin",
                     Soyad = "Kazan",
-                    DogumTarihi = "06.08.1987",
+                    DogumTarihi = Convert.ToDateTime((new DateTime(1987,8,6).ToString("dd/MM/yyyy"))),
                     Meslegi = "Yazılım Geliştirici",
                     Yasi = 37
                 },
@@ -145,7 +180,7 @@ else
                     Id = 6,
                     Ad = "Huseyin",
                     Soyad = "Kazan",
-                    DogumTarihi = "06.08.1987",
+                    DogumTarihi = Convert.ToDateTime((new DateTime(1987,8,6).ToString("dd/MM/yyyy"))),
                     Meslegi = "Yazılım Geliştirici",
                     Yasi = 37
                 },
@@ -154,7 +189,7 @@ else
                     Id = 7,
                     Ad = "Huseyin",
                     Soyad = "Kazan",
-                    DogumTarihi = "06.08.1987",
+                    DogumTarihi = Convert.ToDateTime((new DateTime(1987,8,6).ToString("dd/MM/yyyy"))),
                     Meslegi = "Yazılım Geliştirici",
                     Yasi = 37
                 },
@@ -163,7 +198,7 @@ else
                     Id = 8,
                     Ad = "Huseyin",
                     Soyad = "Kazan",
-                    DogumTarihi = "06.08.1987",
+                    DogumTarihi = Convert.ToDateTime((new DateTime(1987,8,6).ToString("dd/MM/yyyy"))),
                     Meslegi = "Yazılım Geliştirici",
                     Yasi = 37
                 },
@@ -172,7 +207,7 @@ else
                     Id = 9,
                     Ad = "Huseyin",
                     Soyad = "Kazan",
-                    DogumTarihi = "06.08.1987",
+                    DogumTarihi = Convert.ToDateTime((new DateTime(1987,8,6).ToString("dd/MM/yyyy"))),
                     Meslegi = "Yazılım Geliştirici",
                     Yasi = 37
                 },
@@ -181,7 +216,7 @@ else
                     Id = 10,
                     Ad = "Huseyin",
                     Soyad = "Kazan",
-                    DogumTarihi = "06.08.1987",
+                    DogumTarihi = Convert.ToDateTime((new DateTime(1987,8,6).ToString("dd/MM/yyyy"))),
                     Meslegi = "Yazılım Geliştirici",
                     Yasi = 37
                 },
@@ -190,7 +225,7 @@ else
                     Id = 11,
                     Ad = "Huseyin",
                     Soyad = "Kazan",
-                    DogumTarihi = "06.08.1987",
+                    DogumTarihi = Convert.ToDateTime((new DateTime(1987,8,6).ToString("dd/MM/yyyy"))),
                     Meslegi = "Yazılım Geliştirici",
                     Yasi = 37
                 },
@@ -199,7 +234,7 @@ else
                     Id = 12,
                     Ad = "Huseyin",
                     Soyad = "Kazan",
-                    DogumTarihi = "06.08.1987",
+                    DogumTarihi = Convert.ToDateTime((new DateTime(1987,8,6).ToString("dd/MM/yyyy"))),
                     Meslegi = "Yazılım Geliştirici",
                     Yasi = 37
                 },
@@ -208,7 +243,7 @@ else
                     Id = 13,
                     Ad = "Huseyin",
                     Soyad = "Kazan",
-                    DogumTarihi = "06.08.1987",
+                    DogumTarihi = Convert.ToDateTime((new DateTime(1987,8,6).ToString("dd/MM/yyyy"))),
                     Meslegi = "Yazılım Geliştirici",
                     Yasi = 37
                 },
@@ -217,7 +252,7 @@ else
                     Id = 14,
                     Ad = "Huseyin",
                     Soyad = "Kazan",
-                    DogumTarihi = "06.08.1987",
+                    DogumTarihi = Convert.ToDateTime((new DateTime(1987,8,6).ToString("dd/MM/yyyy"))),
                     Meslegi = "Yazılım Geliştirici",
                     Yasi = 37
                 },
@@ -226,7 +261,7 @@ else
                     Id = 15,
                     Ad = "Huseyin",
                     Soyad = "Kazan",
-                    DogumTarihi = "06.08.1987",
+                    DogumTarihi = Convert.ToDateTime((new DateTime(1987,8,6).ToString("dd/MM/yyyy"))),
                     Meslegi = "Yazılım Geliştirici",
                     Yasi = 37
                 },
@@ -235,7 +270,7 @@ else
                     Id = 16,
                     Ad = "Huseyin",
                     Soyad = "Kazan",
-                    DogumTarihi = "06.08.1987",
+                    DogumTarihi = Convert.ToDateTime((new DateTime(1987,8,6).ToString("dd/MM/yyyy"))),
                     Meslegi = "Yazılım Geliştirici",
                     Yasi = 37
                 },
@@ -244,7 +279,7 @@ else
                     Id = 17,
                     Ad = "Huseyin",
                     Soyad = "Kazan",
-                    DogumTarihi = "06.08.1987",
+                    DogumTarihi = Convert.ToDateTime((new DateTime(1987,8,6).ToString("dd/MM/yyyy"))),
                     Meslegi = "Yazılım Geliştirici",
                     Yasi = 37
                 },
@@ -253,7 +288,7 @@ else
                     Id = 18,
                     Ad = "Huseyin",
                     Soyad = "Kazan",
-                    DogumTarihi = "06.08.1987",
+                    DogumTarihi = Convert.ToDateTime((new DateTime(1987,8,6).ToString("dd/MM/yyyy"))),
                     Meslegi = "Yazılım Geliştirici",
                     Yasi = 37
                 },
@@ -262,7 +297,7 @@ else
                     Id = 19,
                     Ad = "Huseyin",
                     Soyad = "Kazan",
-                    DogumTarihi = "06.08.1987",
+                    DogumTarihi = Convert.ToDateTime((new DateTime(1987,8,6).ToString("dd/MM/yyyy"))),
                     Meslegi = "Yazılım Geliştirici",
                     Yasi = 37
                 },
@@ -271,7 +306,7 @@ else
                     Id = 20,
                     Ad = "Huseyin",
                     Soyad = "Kazan",
-                    DogumTarihi = "06.08.1987",
+                    DogumTarihi = Convert.ToDateTime((new DateTime(1987,8,6).ToString("dd/MM/yyyy"))),
                     Meslegi = "Yazılım Geliştirici",
                     Yasi = 37
                 },
@@ -280,7 +315,7 @@ else
                     Id = 21,
                     Ad = "Huseyin",
                     Soyad = "Kazan",
-                    DogumTarihi = "06.08.1987",
+                    DogumTarihi = Convert.ToDateTime((new DateTime(1987,8,6).ToString("dd/MM/yyyy"))),
                     Meslegi = "Yazılım Geliştirici",
                     Yasi = 37
                 }
@@ -299,6 +334,30 @@ else
         StateHasChanged();
     }
 
+    void AdaGore(string name)
+    {
+        FilterType = 1;
+        adaGoreList = Personeller().Where(p => p.Ad.ToLower().Contains(name)).ToList();
+        personelList = adaGoreList.Skip(0).Take(PageSize).ToList();
+        Count = adaGoreList.Count();
+    }
+    void SoyadaGore(string name)
+    {
+        FilterType = 2;
+        soyadaGoreList = Personeller().Where(p => p.Soyad.ToLower().Contains(name)).ToList();
+        personelList = soyadaGoreList.Skip(0).Take(PageSize).ToList();
+        Count = soyadaGoreList.Count();
+    }
+
+    void TariheGore(DateTime date)
+    {
+        DateTime guncelGelenTarih = Convert.ToDateTime(date.ToString("dd/MM/yyyy"));
+        FilterType = 3;
+        tariheGoreList = Personeller().Where(p => p.DogumTarihi == guncelGelenTarih).ToList();
+        personelList = tariheGoreList.Skip(0).Take(PageSize).ToList();
+        Count = tariheGoreList.Count();
+    }
+
     void Add()
     {
         int gelenPersonelId = personelList.OrderByDescending(personelList => personelList.Id).FirstOrDefault().Id;
@@ -309,7 +368,7 @@ else
                 Id = gelenPersonelId,
                 Ad = "Mustafa",
                 Soyad = "Demir",
-                DogumTarihi = "6.4.1996",
+                DogumTarihi = Convert.ToDateTime((new DateTime(1996, 8, 6).ToString("dd/MM/yyyy"))),
                 Meslegi = "Araştırmacı",
                 Yasi = 28
             });
